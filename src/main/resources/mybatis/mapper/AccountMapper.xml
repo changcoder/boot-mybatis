@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chang.mapper.AccountMapper">
+    <resultMap id="baseResultMap" type="com.chang.model.AccountStatement">
+        <id column="pid" property="pid" jdbcType="VARCHAR"></id>
+        <result column="out_trade_no" property="outTradeNo"></result>
+        <result column="order_time" property="orderTime"></result>
+        <result column="order_state" property="orderState"></result>
+        <result column="order_type" property="orderType"></result>
+        <result column="his_amount" property="hisAmount"></result>
+        <result column="bm_amount" property="bmAmount"></result>
+        <result column="card_no" property="cardNo"></result>
+        <result column="out_refund_no" property="outRefundNo"></result>
+        <result column="patient_id" property="patientId"></result>
+        <result column="patient_name" property="patientName"></result>
+        <result column="pay_type" property="payType"></result>
+    </resultMap>
+
+    <sql id="baseColumnList">
+        pid,out_trade_no,order_time,order_state,order_type,his_amount,bm_amount,card_no,out_refund_no,patient_id,patient_name,pay_type
+    </sql>
+
+    <select id="getAll" resultMap="baseResultMap">
+        select
+        <include refid="baseColumnList"/>
+        from account_statement
+    </select>
+
+    <select id="getOne" parameterType="java.lang.String" resultMap="baseResultMap">
+        select
+        <include refid="baseColumnList"/>
+        from account_statement
+        where pid = #{pid}
+    </select>
+
+    <insert id="insert" parameterType="com.chang.model.AccountStatement" >
+       INSERT INTO
+       		account_statement
+       		(pid,out_trade_no,order_state)
+       	VALUES
+       		(#{pid}, #{outTradeNo}, #{orderState})
+    </insert>
+
+    <update id="update" parameterType="com.chang.model.AccountStatement" >
+        UPDATE
+        account_statement
+        SET
+        <if test="outTradeNo != null">out_trade_no = #{outTradeNo},</if>
+        <if test="orderState != null">order_state = #{orderState},</if>
+        order_type = #{orderType}
+        WHERE
+        pid = #{pid}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.String" >
+       DELETE FROM
+       		 account_statement
+       WHERE
+       		 pid =#{id}
+    </delete>
+</mapper>
